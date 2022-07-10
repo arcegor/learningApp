@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="text-center display-3">Test</div>
+    <h4>Test name:</h4>
+    <div th:if="${testName != null}" th:text="${testName}"></div>
+    <form th:if="${testName == null}" th:action="@{/testname}" th:object="${test}" method="post">
+        <input type="text" class="form-control" th:field="*{name}" required>
+        <input type="submit" class="btn btn-primary" value="Add test name">
+    </form>
+    <h5>Questions: </h5>
+    <div class="list group list-group-numbered" th:if="${not #lists.isEmpty(testQuestionList)}">
+        <div class="justify-content-between" th:each="question, stat: ${testQuestionList}">
+            <div th:text="${stat.index+1 + ') ' + question.name}"></div>
+            <h6>Answers: </h6>
+            <div class="list-group" th:if="${not #lists.isEmpty(question.testAnswers)}">
+                <div class="justify-content-between" th:each="answer, iterStat: ${question.testAnswers}">
+                <div th:text="${'  ' + iterStat.count + ') ' + answer.name}"></div>
+                </div>
+            </div>
+            <form th:action="@{/testquestionanswer}" th:object="${testAnswer}" method="post">
+                <div>
+                    <input type="text" class="form-control" th:field="*{name}" required>
+                    <input type="checkbox" class="form-check-input me-1" th:field="*{flag}">
+                    <input type="hidden" th:value="${stat.index}" th:name="index" required>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Add question answer">
+            </form>
+        </div>
+    </div>
+    <form th:action="@{/testquestion}" th:object="${testQuestion}" method="post">
+        <input type="text" class="form-control" th:field="*{name}" required>
+        <input type="submit" class="btn btn-primary" value="Add test question">
+    </form>
+    <button type="button" class="btn btn-primary" th:onclick="|window.location.href='/savetest'|" th:disabled="${testName == null}">Save test</button>
+</div>
+</body>
+</html>

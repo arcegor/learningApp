@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="align-content-center">
+    <div class="text-center">
+        <h2 class="text-center display-3 ">
+            Offline User Training</h2>
+        <span> Welcome to the distance learning system of the "System name". Please familiarize yourself with the contents of our disk, which we hope will help you learn the functions of the Passport Issuance Environment software.
+The training materials are aimed at employees using
+the software deployed at Passport Processing and Issuance Points and the Personalization Center. Their aim is to familiarize users and administrators with the
+basics of the system.
+The training materials are organized into sections with
+guidance and self-learning content.
+The materials include video tutorials, presentations, user manuals,
+how-tos, diagrams, and FAQs.
+To begin, select a section below.
+                    <p>
+                        Get started by selecting one of the sections below.</p>
+            </span>
+    </div>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Courses</h5>
+                        <p class="card-text">Some description</p>
+                        <a th:href="@{courses}" class="btn btn-primary stretched-link">Go to courses</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tests</h5>
+                        <p class="card-text">Some description</p>
+                        <a th:href="@{tests}" class="btn btn-primary stretched-link">Go to tests</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">FAQ</h5>
+                        <p class="card-text">Some description</p>
+                        <a th:href="@{faq}" class="btn btn-primary stretched-link">Go to faq</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Materials</h5>
+                        <p class="card-text">Some description</p>
+                        <a th:href="@{materials}" class="btn btn-primary stretched-link">Go to materials</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
