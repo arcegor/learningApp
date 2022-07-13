@@ -21,20 +21,19 @@ public class TestController {
     @Autowired
     private TestWrapper testWrapper;
 
-    @GetMapping("/backtomainpage")
-    public String backToMainTest(Test test) {
-        return "main";
-    }
-
     @GetMapping("/newtest")
     public String showAddingTestForm(Model model, Test test) {
-        List<TestQuestion> testQuestionList = testWrapper.getTestQuestionList();
-        String testName = testWrapper.getName();
-        model.addAttribute("testQuestionList", testQuestionList);
-        model.addAttribute("testName", testName);
+        model.addAttribute("testQuestionList", testWrapper.getTestQuestionList());
+        model.addAttribute("testName", testWrapper.getName());
         model.addAttribute("testQuestion", new TestQuestion());
         model.addAttribute("testAnswer", new TestAnswer());
         return "newtest";
+    }
+
+    @GetMapping("/backtotests")
+    public String backToTests(){
+        testWrapper = new TestWrapper();
+        return "redirect:/tests";
     }
 
     @PostMapping("/newtest")
@@ -54,17 +53,7 @@ public class TestController {
 
     @GetMapping("/savetest")
     public String saveTest(Model model) {
-        Test test = new Test();
-        for (TestQuestion testQuestion: testWrapper.getTestQuestionList()
-             ) {
-            testQuestion.setTest(test);
-            for (TestAnswer testAnswer: testQuestion.getTestAnswers()
-                 ) {
-                testAnswer.setTestQuestion(testQuestion);
-            }
-        }
-        test.setName(testWrapper.getName());
-        test.setTestQuestions(testWrapper.getTestQuestionList());
+        Test test = testWrapper.unwrapToTest(testWrapper);
         testRepository.save(test);
         testWrapper = new TestWrapper();
         return "redirect:/tests";
@@ -89,5 +78,59 @@ public class TestController {
                                         @RequestParam(value = "index") int index){
         testWrapper.getTestQuestionList().get(index).getTestAnswers().add(testAnswer);
         return "redirect:/newtest";
+    }
+
+    @GetMapping("/edittestname")
+    public String editTestName(){
+        testWrapper.setName(null);
+        return "redirect:/newtest";
+    }
+
+    @GetMapping("/deletetestquestion/{id}")
+    public String editTestQuestion(@PathVariable(value = "id") int id, Model model){
+        testWrapper.getTestQuestionList().remove(id);
+        return "redirect:/newtest";
+    }
+
+    @GetMapping("/deletetestanswer/{id_question}/{id_answer}")
+    public String editTestAnswer(@PathVariable(value = "id_question") String id_question,
+                                 @PathVariable(value = "id_answer") String id_answer,
+                                 Model model){
+        testWrapper.getTestQuestionList().get(Integer.parseInt(id_question)).
+                getTestAnswers().remove(Integer.parseInt(id_answer));
+        return "redirect:/newtest";
+    }
+
+    @GetMapping("/showtest/{id}")
+    public String showTest(@PathVariable(value = "id") long id, Model model){
+        Test test = testRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+        model.addAttribute("test", test);
+        return "showtest";
+    }
+
+    @GetMapping("/checktest/{id}")
+    public String checkTest(@PathVariable(value = "id") long id, Model model) {
+        Test test = testRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+        model.addAttribute("test", test);
+        return "checktest";
+    }
+
+    @PostMapping("/checktest/{id}")
+    public String checkTest(Model model, @Valid Test test) {
+        return "checktest";
+    }
+
+    @GetMapping("/updatetest/{id}")
+    public String updateTest(@PathVariable(value = "id") long id, Model model){
+        Test test = testRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+        testWrapper = testWrapper.wrapTest(test);
+        model.addAttribute("testQuestionList", testWrapper.getTestQuestionList());
+        model.addAttribute("testName", testWrapper.getName());
+        model.addAttribute("testQuestion", new TestQuestion());
+        model.addAttribute("testAnswer", new TestAnswer());
+        return "updatetest";
     }
 }

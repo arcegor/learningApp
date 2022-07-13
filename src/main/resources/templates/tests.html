@@ -17,20 +17,25 @@
     <div th:switch="${testList}">
         <h2 th:case="${#lists.isEmpty(testList)}">No tests yet!</h2>
         <div th:case="*">
-            <ol class="list-group list-group-numbered">
-                <li class="list-group-item d-flex justify-content-between align-items-start"  th:each="test : ${testList}">
+            <ol class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-start"  th:each="test, stat : ${testList}">
                     <div class="ms-2 me-auto">
-                        <div class="fw-bold" th:text="${test.name}"></div>
-                        Some description
-                        <a class="btn btn-primary" th:href="@{/deletetest/{id}(id=${test.id})}">Delete test</a>
+                        <div class="p-2 mb-2 fs-4" th:text="${stat.count + ')  ' + test.name}"></div>
+                        <div class="d-inline p-2">
+                            <a class="btn btn-primary" th:href="@{/updatetest/{id}(id=${test.id})}">Edit test</a>
+                            <a class="btn btn-primary" th:href="@{/deletetest/{id}(id=${test.id})}">Delete test</a>
+                            <a class="btn btn-primary" th:href="@{/checktest/{id}(id=${test.id})}">Check test</a>
+                            <a class="btn btn-primary" th:href="@{/showtest/{id}(id=${test.id})}">Show test</a>
+                        </div>
+
                     </div>
-                    <span class="badge bg-primary rounded-pill" th:text="'test_id = ' + ${test.id}"></span>
                 </li>
             </ol>
         </div>
     </div>
-    <a class="btn btn-primary" href="/newtest" role="button">Add new test</a>
-    <a class="btn btn-primary" href="/backtomainpage" role="button">Go to main page</a>
+
+    <a class="btn btn-primary" th:href="@{/newtest}" role="button">Add new test</a>
+    <a class="btn btn-primary" th:href="@{/}" role="button">Go to main page</a>
 </div>
 
 </body>

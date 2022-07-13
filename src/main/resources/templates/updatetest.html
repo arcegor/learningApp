@@ -50,7 +50,7 @@
         <input type="text" class="form-control" th:field="*{name}" required>
         <input type="submit" class="btn btn-primary" value="Add test question">
     </form>
-    <button type="button" class="btn btn-primary" th:onclick="|window.location.href='/savetest'|" th:disabled="${testName == null}">Save test</button>
+    <button type="button" class="btn btn-primary" th:onclick="|window.location.href='/savetest'|" th:disabled="${testName == null}">Update test</button>
     <button type="button" class="btn btn-primary" th:onclick="|window.location.href='/backtotests'|">Go back</button>
 
 </div>
