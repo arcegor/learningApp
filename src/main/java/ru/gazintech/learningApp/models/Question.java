@@ -8,14 +8,15 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"testQuestion"})
-@Table(name = "testAnswer")
-public class TestAnswer {
+@ToString(exclude = {"manual"})
+@Table(name = "question")
+public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -24,8 +25,13 @@ public class TestAnswer {
     @Length(min = 1, max = 255)
     private String name;
 
-    @ManyToOne
-    private TestQuestion testQuestion;
+    private String description;
 
-    private Boolean flag;
+    @OneToMany(mappedBy = "question", orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Tag> tags;
+
+    @ManyToOne
+    private Manual manual;
 }
+

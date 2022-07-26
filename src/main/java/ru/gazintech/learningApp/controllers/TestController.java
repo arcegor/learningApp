@@ -5,43 +5,53 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.gazintech.learningApp.models.Manual;
 import ru.gazintech.learningApp.models.Test;
 import ru.gazintech.learningApp.models.TestAnswer;
 import ru.gazintech.learningApp.models.TestQuestion;
 import ru.gazintech.learningApp.models.wrappers.TestWrapper;
+import ru.gazintech.learningApp.repository.ManualRepository;
 import ru.gazintech.learningApp.repository.TestRepository;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller("/tests")
+@Controller
 public class TestController {
     @Autowired
     private TestRepository testRepository;
     @Autowired
+    private ManualRepository manualRepository;
+    @Autowired
     private TestWrapper testWrapper;
 
     @GetMapping("/newtest")
-    public String showAddingTestForm(Model model, Test test) {
+    public String showAddingTestForm(
+            Model model, Test test) {
         model.addAttribute("testQuestionList", testWrapper.getTestQuestionList());
         model.addAttribute("testName", testWrapper.getName());
+        model.addAttribute("testDescription", testWrapper.getDescription());
         model.addAttribute("testQuestion", new TestQuestion());
         model.addAttribute("testAnswer", new TestAnswer());
+        model.addAttribute("number", testWrapper.getNumber());
         return "newtest";
     }
 
     @GetMapping("/backtotests")
-    public String backToTests(){
+    public String backToTests(RedirectAttributes redirectAttributes){
+        long id = testWrapper.getManual().getId();
+        redirectAttributes.addAttribute("id", id);
         testWrapper = new TestWrapper();
-        return "redirect:/tests";
+        return "redirect:/{id}/tests";
+
     }
 
-    @PostMapping("/newtest")
-    public String addTest(@RequestParam(value = "name") String testName, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "newtest";
-        }
-        testWrapper.setName(testName);
+    @PostMapping("/inittest")
+    public String addManualToTest(@RequestParam(value = "id") long id){
+        Manual manual =  manualRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+        testWrapper.setManual(manual);
         return "redirect:/newtest";
     }
 
@@ -51,20 +61,41 @@ public class TestController {
         return "redirect:/newtest";
     }
 
+    @GetMapping("/edittestname")
+    public String editTestName(Model model) {
+        testWrapper.setName(null);
+        return "redirect:/newtest";
+    }
+
+    @GetMapping("/edittestdescription")
+    public String editTestDescription(){
+        testWrapper.setDescription(null);
+        return "redirect:/newtest";
+    }
+
+    @PostMapping("/testdescription")
+    public String addTestDescription(@RequestParam String description) {
+        testWrapper.setDescription(description);
+        return "redirect:/newtest";
+    }
+
     @GetMapping("/savetest")
-    public String saveTest(Model model) {
+    public String saveTest(Model model, RedirectAttributes redirectAttributes) {
         Test test = testWrapper.unwrapToTest(testWrapper);
         testRepository.save(test);
         testWrapper = new TestWrapper();
-        return "redirect:/tests";
+        long id = test.getManual().getId();
+        redirectAttributes.addAttribute("id", id);
+        return "redirect:/{id}/tests";
     }
 
     @GetMapping("/deletetest/{id}")
-    public String deleteTest(@PathVariable("id") long id, Model model) {
+    public String deleteTest(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
         Test test = testRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
         testRepository.delete(test);
-        return "redirect:/tests";
+        redirectAttributes.addAttribute("id", test.getManual().getId());
+        return "redirect:/{id}/tests";
     }
 
     @PostMapping("/testquestion")
@@ -80,14 +111,26 @@ public class TestController {
         return "redirect:/newtest";
     }
 
-    @GetMapping("/edittestname")
-    public String editTestName(){
-        testWrapper.setName(null);
+    @PostMapping("/edittestdescription")
+    public String editTestDescription(@RequestParam(value = "description") String description){
+        testWrapper.setDescription(description);
+        return "redirect:/newtest";
+    }
+
+    @PostMapping("/addtestnumber")
+    public String addTestNumber(@RequestParam(value = "number") int number){
+        testWrapper.setNumber(number);
+        return "redirect:/newtest";
+    }
+
+    @GetMapping("/edittestnumber")
+    public String editTestNumber(){
+        testWrapper.setNumber(null);
         return "redirect:/newtest";
     }
 
     @GetMapping("/deletetestquestion/{id}")
-    public String editTestQuestion(@PathVariable(value = "id") int id, Model model){
+    public String deleteTestQuestion(@PathVariable(value = "id") int id, Model model){
         testWrapper.getTestQuestionList().remove(id);
         return "redirect:/newtest";
     }
@@ -106,31 +149,37 @@ public class TestController {
         Test test = testRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
         model.addAttribute("test", test);
+        model.addAttribute("manualId", test.getManual().getId());
         return "showtest";
     }
 
-    @GetMapping("/checktest/{id}")
-    public String checkTest(@PathVariable(value = "id") long id, Model model) {
-        Test test = testRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
-        model.addAttribute("test", test);
-        return "checktest";
-    }
-
-    @PostMapping("/checktest/{id}")
-    public String checkTest(Model model, @Valid Test test) {
-        return "checktest";
-    }
-
     @GetMapping("/updatetest/{id}")
-    public String updateTest(@PathVariable(value = "id") long id, Model model){
-        Test test = testRepository.findById(id)
+    public String updateTest(@PathVariable(value = "id") long id, Model model, Test test){
+        test = testRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
         testWrapper = testWrapper.wrapTest(test);
         model.addAttribute("testQuestionList", testWrapper.getTestQuestionList());
         model.addAttribute("testName", testWrapper.getName());
+        model.addAttribute("testDescription", testWrapper.getDescription());
         model.addAttribute("testQuestion", new TestQuestion());
         model.addAttribute("testAnswer", new TestAnswer());
+        model.addAttribute("number", testWrapper.getNumber());
         return "updatetest";
+    }
+
+    @GetMapping("/edittestquestion/{id}")
+    public String editTestQuestion(@PathVariable(value = "id") int id, Model model){
+        TestQuestion testQuestion = testWrapper.getTestQuestionList().get(id);
+        model.addAttribute("editingQuestion", testQuestion);
+        model.addAttribute("answers", testQuestion.getTestAnswers());
+        model.addAttribute("question_id", id);
+        return "edittestquestion";
+    }
+
+    @PostMapping("/edittestquestion")
+    public String updateTestQuestion(@Valid TestQuestion editingQuestion,
+                                     Model model, @RequestParam(value = "question_id") int id){
+        testWrapper.getTestQuestionList().set(id, editingQuestion);
+        return "redirect:/newtest";
     }
 }

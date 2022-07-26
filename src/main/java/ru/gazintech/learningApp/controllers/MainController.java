@@ -4,49 +4,58 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.gazintech.learningApp.models.Course;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import ru.gazintech.learningApp.models.Manual;
 import ru.gazintech.learningApp.models.Test;
-import ru.gazintech.learningApp.repository.CourseRepository;
-import ru.gazintech.learningApp.repository.TestRepository;
+import ru.gazintech.learningApp.repository.ManualRepository;
 
-import java.util.List;
+import javax.validation.Valid;
 
-@Controller("/main")
-public class MainController {
-
+@Controller
+public class MainController
+{
     @Autowired
-    private CourseRepository courseRepository;
-
-    @Autowired
-    private TestRepository testRepository;
-
+    private ManualRepository manualRepository;
     @GetMapping("/")
-    public String main(Model model){
+    public String showManualList(Model model){
+        model.addAttribute("manualList", manualRepository.findAll());
         return "main";
     }
 
-    @GetMapping("/tests")
-    public String showTests(Model model){
-        List<Test> testList = testRepository.findAll();
-        model.addAttribute("testList", testList);
-        return "tests";
+    @GetMapping("/manual/{id}")
+    public String showManual(@PathVariable(value = "id") long id, Model model){
+        Manual manual =  manualRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+        model.addAttribute("manual", manual);
+        return "manual";
     }
 
-    @GetMapping("/courses")
-    public String showCourses(Model model){
-        List<Course> courseList = courseRepository.findAll();
-        model.addAttribute("courseList", courseList);
-        return "courses";
+    @GetMapping("/manual/{id}/update")
+    public String updateManual(@PathVariable(value = "id") long id, Model model){
+        Manual manual =  manualRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+        model.addAttribute("manual", manual);
+        return "updatemanual";
     }
 
-    @GetMapping("/faq")
-    public String showFaq(Model model){
-        return "faq";
+    @GetMapping("/newmanual")
+    public String createManual(Model model){
+        model.addAttribute("manual", new Manual());
+        return "newmanual";
     }
 
-    @GetMapping("/materials")
-    public String showMaterials(Model model){
-        return "materials";
+    @PostMapping("/savemanual")
+    public String saveManual(Model model, @Valid Manual manual){
+        manualRepository.save(manual);
+        return "redirect:/";
     }
 
+    @GetMapping("/deletemanual/{id}")
+    public String deleteManual(@PathVariable("id") long id, Model model) {
+        Manual manual = manualRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid manual Id:" + id));
+        manualRepository.delete(manual);
+        return "redirect:/";
+    }
 }

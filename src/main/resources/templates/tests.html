@@ -5,15 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tests</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
 </head>
-<body>
-<div class="container">
-    <div class="text-center">
-        <h2 class="text-center display-3 ">
-            Test list</h2>
+<body class="d-flex flex-column min-vh-100">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-5">
+        <a class="navbar-brand" href="#!">Offline User Training</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Main page</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">Go back</a></li>
+            </ul>
+        </div>
     </div>
+</nav>
+<div class="container px-4 px-lg-5">
+    <h1 class="display-4 text-center">Test list</h1>
     <div th:switch="${testList}">
         <h2 th:case="${#lists.isEmpty(testList)}">No tests yet!</h2>
         <div th:case="*">
@@ -21,22 +30,31 @@
                 <li class="list-group-item d-flex justify-content-between align-items-start"  th:each="test, stat : ${testList}">
                     <div class="ms-2 me-auto">
                         <div class="p-2 mb-2 fs-4" th:text="${stat.count + ')  ' + test.name}"></div>
+                        <div class="p-2 mb-2 fs-4" th:text="${test.description}"></div>
                         <div class="d-inline p-2">
                             <a class="btn btn-primary" th:href="@{/updatetest/{id}(id=${test.id})}">Edit test</a>
                             <a class="btn btn-primary" th:href="@{/deletetest/{id}(id=${test.id})}">Delete test</a>
-                            <a class="btn btn-primary" th:href="@{/checktest/{id}(id=${test.id})}">Check test</a>
                             <a class="btn btn-primary" th:href="@{/showtest/{id}(id=${test.id})}">Show test</a>
                         </div>
-
                     </div>
                 </li>
             </ol>
         </div>
     </div>
-
-    <a class="btn btn-primary" th:href="@{/newtest}" role="button">Add new test</a>
-    <a class="btn btn-primary" th:href="@{/}" role="button">Go to main page</a>
+    <div class="p-2 mb-2 fs-4">
+        <form th:action="@{/inittest}" th:object="${manual}" method="post">
+            <input type="hidden" th:field="*{id}" th:name="id">
+            <input type="submit" class="btn btn-primary" value="Add new test">
+        </form>
+        <a class="btn btn-primary" th:href="@{/manual/{id}(id=${manual.id})}" role="button">Go to manual</a>
+    </div>
 </div>
 
+<footer class="py-5 bg-dark mt-auto">
+    <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -8,14 +8,17 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"testQuestion"})
-@Table(name = "testAnswer")
-public class TestAnswer {
+@ToString(exclude = {"question"})
+@Table(name = "tag")
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -24,8 +27,8 @@ public class TestAnswer {
     @Length(min = 1, max = 255)
     private String name;
 
-    @ManyToOne
-    private TestQuestion testQuestion;
+    private String description;
 
-    private Boolean flag;
+    @ManyToOne
+    private Question question;
 }

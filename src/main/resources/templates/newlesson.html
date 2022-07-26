@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Manual List</title>
+    <title>Lesson</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -22,35 +23,26 @@
     </div>
 </nav>
 <div class="container px-4 px-lg-5">
-    <h1 class="display-4 text-center">Manual list</h1>
-    <div th:switch="${manualList}">
-        <h2 th:case="${#lists.isEmpty(manualList)}" th:text="'No manuals yet!'"></h2>
-        <div th:case="*">
-            <ol class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-start"  th:each="manual, stat : ${manualList}">
-                    <div class="ms-2 me-auto">
-                        <div class="p-2 mb-2 fs-4" th:text="${stat.count + ')  ' + manual.name}"></div>
-                        <div class="p-2 mb-2 fs-4" th:text="${manual.description}"></div>
-                        <div class="d-inline p-2">
-                            <a class="btn btn-primary" th:href="@{/deletemanual/{id}(id=${manual.id})}">Delete manual</a>
-                            <a class="btn btn-primary" th:href="@{/manual/{id}(id=${manual.id})}">Go to manual</a>
-                            <a class="btn btn-primary" th:href="@{/manual/{id}/update(id=${manual.id})}">Update manual</a>
-                        </div>
-                    </div>
-                </li>
-            </ol>
+    <div class="text-center display-4">Lesson</div>
+    <form class="row g-3 needs-validation" th:object="${lesson}" th:action="@{/savelesson}" method="post">
+        <div class="col">
+            <label for="Name" class="form-label">Имя</label>
+            <input type="text" class="form-control" id="name" placeholder="Lesson name" th:field="*{name}" required>
+            <input type="hidden" class="form-control" th:value="${course_id}" th:name="course_id" required>
+            <div class="valid-feedback">
+                Well done!
+            </div>
         </div>
-    </div>
-
-    <a class="btn btn-primary" th:href="@{/newmanual}" role="button">Add new manual</a>
-    <a class="btn btn-primary" th:href="@{/}" role="button">Go to main page</a>
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" aria-label="Description" placeholder="Lesson description" th:field="*{description}"></textarea>
+        <input type="submit" class="btn btn-primary" value="Create lesson">
+    </form>
+    <a class="btn btn-primary" th:href="@{/course/{id}(id=${course_id})}" role="button">Go to course page</a>
 </div>
-
 <footer class="py-5 bg-dark mt-auto">
     <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
 </footer>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
 </body>
 </html>
