@@ -4,45 +4,86 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Question</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/xdrzy7qkxs10wmw35t0w8sglrh9swjmnmnwhbra34vrz9fpm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container px-5">
-        <a class="navbar-brand" href="#!">Offline User Training</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Main page</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">Go back</a></li>
-            </ul>
-        </div>
+
+<div th:insert="~{common :: header}"></div>
+
+<div class="container px-4 px-lg-5 body">
+    <div class="text-center display-4">Вопрос</div>
+    <div th:if="${questionName != null}">
+        <div class="py-1 mb-2 fs-5">Формулировка вопроса:</div>
+        <div class="py-1 mb-2 fs-6" th:text="${questionName}"></div>
     </div>
-</nav>
-<div class="container px-4 px-lg-5">
-    <div class="text-center display-4">Question</div>
-    <form class="row g-3 needs-validation" th:object="${question}" th:action="@{/savequestion}" method="post">
-        <div class="col">
-            <label for="Name" class="form-label">Имя</label>
-            <input type="text" class="form-control" id="name" placeholder="Question name" th:field="*{name}" required>
-            <input type="hidden" class="form-control" th:value="${manual_id}" th:name="manual_id" required>
-            <div class="valid-feedback">
-                Well done!
-            </div>
-        </div>
-        <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" id="description" aria-label="Description" placeholder="Question description" th:field="*{description}"></textarea>
-        <input type="submit" class="btn btn-primary" value="Create question">
+    <button type="button" class="btn btn-primary" th:if="${questionName != null}" th:onclick="|window.location.href='/editquestionname'|">Изменить формулировку вопроса</button>
+    <form th:if="${questionName == null}" th:action="@{/questionname}" th:object="${question}" method="post">
+        <label for="questionName" class="form-label py-1 mb-2 fs-5">Формулировка вопроса:</label>
+        <input type="text" class="form-control py-1 mb-2 fs-6" id="questionName" placeholder="Формулировка вопроса:" th:field="*{name}" required>
+        <input type="submit" class="btn btn-primary" value="Ввести формулировку вопроса">
     </form>
+    <div th:if="${answer != null}">
+        <div class="py-1 mb-2 fs-5">Ответ:</div>
+        <div class="py-1 mb-2 fs-6" th:utext="${answer}"></div>
+    </div>
+    <button type="button" class="btn btn-primary" th:if="${answer != null}" th:onclick="|window.location.href='/editanswer'|">Изменить ответ</button>
+    <form th:if="${answer == null}" th:action="@{/answer}" th:object="${question}" method="post">
+        <label for="testDescription" class="form-label py-1 mb-2 fs-5">Ответ:</label>
+        <textarea type="text" rows="1" id="testDescription" class="form-control py-1 mb-2 fs-4" th:field="*{answer}" autocomplete="on"></textarea>
+        <input name="image" type="file" id="upload" class="hidden" onchange="">
+        <script>
+            tinymce.init({
+                selector: '#testDescription',
+                image_advtab: true,
+                file_picker_callback: function(callback, value, meta) {
+                    if (meta.filetype == 'image') {
+                        $('#upload').trigger('click');
+                        $('#upload').on('change', function() {
+                            var file = this.files[0];
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                callback(e.target.result, {
+                                    alt: ''
+                                });
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                    }
+                },
+                automatic_uploads: false,
+                height: '200',
+                plugins: 'autolink lists media table image imagetools',
+                toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents',
+                toolbar_mode: 'floating'
+            });
+        </script>
+        <input type="submit" class="btn btn-primary" value="Добавить ответ">
+    </form>
+
+    <div class="py-1 mb-2 fs-4">Список тегов: </div>
+    <ol class="list-group list-group-flush py-1">
+        <li class="list-group-item d-flex justify-content-between align-items-start" th:each="tag, stat: ${tags}">
+            <div class="py-0 me-auto fs-5" th:text="${tag.name}"></div>
+            <a type="button" class="btn btn-primary"  th:if="${not #strings.contains(tagList, tag.name)}"
+               th:href="@{/tachtag/{id}(id=${tag.id})}">Прикрепить тэг</a>
+            <a type="button" class="btn btn-primary"  th:if="${#strings.contains(tagList, tag.name)}"
+               th:href="@{/detachtag/{id}(id=${tag.id})}">Открепить тэг</a>
+        </li>
+
+    </ol>
+    <div class="vstack gap-2 col-md-5 mx-auto">
+        <a class="btn btn-primary" th:href="@{/savequestion}" th:disabled="${questionName == null}">Сохранить вопрос</a>
+        <a class="btn btn-primary" th:href="@{/backtoquestions}" role="button">К списку вопросов</a>
+    </div>
 </div>
-<a class="btn btn-primary" th:href="@{/{id}/questions(id=${manual_id})}" role="button">Go to question list</a>
+
 <footer class="py-5 bg-dark mt-auto">
     <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
-</body>
+
+<script src="/bootstrap/dist/js/bootstrap.min.js"></script></body>
 </html>

@@ -9,11 +9,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.gazintech.learningApp.models.Course;
 import ru.gazintech.learningApp.models.Lesson;
 import ru.gazintech.learningApp.models.Manual;
+import ru.gazintech.learningApp.models.wrappers.TestWrapper;
 import ru.gazintech.learningApp.repository.CourseRepository;
 import ru.gazintech.learningApp.repository.LessonRepository;
 import ru.gazintech.learningApp.repository.ManualRepository;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,13 +27,16 @@ public class CourseController {
     private ManualRepository manualRepository;
     @Autowired
     private LessonRepository lessonRepository;
-    @GetMapping("/course/{id}")
+    @GetMapping("/{manual_id}/course/{id}")
     public String showCourse(@PathVariable(value = "id") long id,
+                             @PathVariable(value = "manual_id") long manual_id,
                              Model model){
         List<Lesson> lessonList = lessonRepository.findByCourse_id(id);
+        lessonList.sort(Lesson::compareTo);
         Course course =  courseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid course Id:" + id));
         model.addAttribute("course", course);
+        model.addAttribute("manual_id", manual_id);
         model.addAttribute("lessonList", lessonList);
         return "course";
     }
@@ -44,11 +49,18 @@ public class CourseController {
     }
 
     @PostMapping("/savecourse")
-    public String saveCourse(Model model, @Valid Course course,
+    public String saveCourse(Model model,
+                             @Valid Course course,
                              @RequestParam(value = "manual_id") long id,
                              RedirectAttributes redirectAttributes){
         course.setManual(manualRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid course Id:" + id)));
+        if (courseRepository.existsCourseById(course.getId())){
+            Course old_course = courseRepository.findById(course.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid course Id:" + id));
+            List<Lesson> lessonList = old_course.getLessons();
+            course.setLessons(lessonList);
+        }
         courseRepository.save(course);
         redirectAttributes.addAttribute("id", id);
         return "redirect:/{id}/courses";
@@ -57,7 +69,8 @@ public class CourseController {
     @GetMapping("/{manual_id}/deletecourse/{id}")
     public String deleteCourse(@PathVariable("id") long id,
                                @PathVariable(value = "manual_id") long manual_id,
-                               Model model, RedirectAttributes redirectAttributes
+                               Model model,
+                               RedirectAttributes redirectAttributes
                                ) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid course Id:" + id));

@@ -14,7 +14,7 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Main page</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Main page</a></li>
         <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
         <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
         <li class="nav-item"><a class="nav-link" href="#!">Go back</a></li>
@@ -23,24 +23,24 @@
   </div>
 </nav>
 <div class="container px-4 px-lg-5">
-  <div class="text-center display-4">Updating course</div>
-  <form class="row g-3 needs-validation" th:object="${course}" th:action="@{/savecourse}" method="post">
+  <div class="text-center display-4">Курс</div>
+  <form th:object="${course}" th:action="@{/savecourse}" method="post">
     <div class="col">
-      <label for="Name" class="form-label">Имя</label>
-      <input type="text" class="form-control" id="name" th:placeholder="${course.name}" th:field="*{name}" required>
-      <input type="hidden" class="form-control" th:field="*{id}" required>
-      <input type="hidden" class="form-control" th:field="*{lessons}">
+      <label for="Name" class="form-label py-1 mb-2 fs-5">Имя курса</label>
+      <input type="text" class="form-control py-1 mb-2 fs-6" id="name" th:placeholder="*{name}" th:field="*{name}" required>
       <input type="hidden" class="form-control" th:value="${manual_id}" th:name="manual_id" required>
-      <div class="valid-feedback">
-        Well done!
-      </div>
+      <input type="hidden" class="form-control" th:field="*{id}" required>
     </div>
-    <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" aria-label="Description"  th:placeholder="${course.description}" th:field="*{description}"></textarea>
-    <input type="submit" class="btn btn-primary" value="Update course">
+    <label for="description" class="form-label py-1 mb-2 fs-5">Описание курса</label>
+    <textarea class="form-control py-1 mb-2 fs-6" id="description" aria-label="Description"
+              th:placeholder="*{description}" th:field="*{description}"></textarea>
+    <div class="vstack gap-2 col-md-5 mx-auto">
+      <input type="submit" class="btn btn-primary" value="Обновить курс">
+      <a class="btn btn-primary" th:href="@{/{id}/courses(id=${manual_id})}" role="button">Перейти к списку курсов</a>
+    </div>
   </form>
 </div>
-<a class="btn btn-primary" th:href="@{/{id}/courses(id=${manual_id})}" role="button">Go to course list</a>
+
 <footer class="py-5 bg-dark mt-auto">
   <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
 </footer>

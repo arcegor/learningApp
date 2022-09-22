@@ -23,22 +23,22 @@
   </div>
 </nav>
 <div class="container px-4 px-lg-5">
-  <div class="text-center display-4">Course</div>
-  <form class="row g-3 needs-validation" th:object="${course}" th:action="@{/savecourse}" method="post">
+  <div class="text-center display-4">Курс</div>
+  <form th:object="${course}" th:action="@{/savecourse}" method="post">
     <div class="col">
-      <label for="Name" class="form-label">Имя</label>
-      <input type="text" class="form-control" id="name" placeholder="Course name" th:field="*{name}" required>
+      <label for="Name" class="form-label py-1 mb-2 fs-5">Имя курса</label>
+      <input type="text" class="form-control py-1 mb-2 fs-6" id="name" placeholder="Имя курса" th:field="*{name}" required>
       <input type="hidden" class="form-control" th:value="${manual_id}" th:name="manual_id" required>
-      <div class="valid-feedback">
-        Well done!
-      </div>
     </div>
-    <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" aria-label="Description" placeholder="Course description" th:field="*{description}"></textarea>
-    <input type="submit" class="btn btn-primary" value="Create course">
-  </form>
+    <label for="description" class="form-label py-1 mb-2 fs-5">Описание курса</label>
+    <textarea class="form-control py-1 mb-2 fs-6" id="description" aria-label="Description" placeholder="Описание курса" th:field="*{description}"></textarea>
+    <div class="vstack gap-2 col-md-5 mx-auto">
+       <input type="submit" class="btn btn-primary" value="Сохранить курс">
+       <a class="btn btn-primary" th:href="@{/{id}/courses(id=${manual_id})}" role="button">Перейти к списку курсов</a>
+    </div>
+</form>
 </div>
-<a class="btn btn-primary" th:href="@{/{id}/courses(id=${manual_id})}" role="button">Go to course list</a>
+
 <footer class="py-5 bg-dark mt-auto">
   <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
 </footer>

@@ -25,11 +25,13 @@
     </div>
 </nav>
 <div class="container px-4 px-lg-5">
-    <div class="text-center display-4">Editing test question</div>
-    <div class="p-2 mb-2 fs-4">Question: </div>
+    <div class="text-center display-4">Редактирование вопроса</div>
     <form th:action="@{/edittestquestion}" th:object="${editingQuestion}" method="post">
-        <label for="testQuestion" class="form-label p-2 mb-2 fs-4">Add test question</label>
-        <textarea type="text" rows="1" id="testQuestion" class="form-control p-2 mb-2 fs-4"
+        <label for="number" class="form-label py-1 mb-2 fs-4">Номер теста:</label>
+        <input type="text" class="form-control py-1 mb-2 fs-5" id="number" th:placeholder="*{number}" th:field="*{number}" required>
+
+        <label for="testQuestion" class="form-label py-1 mb-2 fs-4"></label>
+        <textarea type="text" rows="1" id="testQuestion" class="form-control py-1 mb-2 fs-4"
                   th:placeholder="*{name}" th:field="*{name}" autocomplete="on"></textarea>
         <script>
             tinymce.init({
@@ -40,8 +42,8 @@
                 toolbar_mode: 'floating'
             });
         </script>
-        <div class="p-2 mb-2 fs-4">Answers: </div>
-        <div class="list-group p-2 mb-2 fs-4">
+        <div class="py-1 mb-2 fs-4">Ответы: </div>
+        <div class="list-group py-1 mb-2 fs-4">
             <div class="justify-content-between" th:each="answer, stat: *{testAnswers}">
                 <label for="testAnswer" type="hidden"></label>
                 <textarea type="text" rows="1" id="testAnswer" th:placeholder="*{testAnswers[__${stat.index}__].name}" class="form-control p-2 mb-2 fs-4"
@@ -55,14 +57,18 @@
                         toolbar_mode: 'floating'
                     });
                 </script>
-                <div>
+                <div class="fs-6">
                     <input class="form-check-input" type="checkbox" th:field="*{testAnswers[__${stat.index}__].flag}" id="flexCheckDefault" th:checked="*{testAnswers[__${stat.index}__].name}">
-                    <label class="form-check-label" for="flexCheckDefault">True answer</label>
+                    <label class="form-check-label" for="flexCheckDefault">Правильный ответ</label>
                 </div>
             </div>
             </div>
         <input type="hidden" th:value="${question_id}" th:name="question_id" required>
-        <input type="submit" class="btn btn-primary p-2 mb-2" value="Save test question">
+        <div class="vstack gap-2 col-md-5 mx-auto">
+            <button type="submit" class="btn btn-secondary">Сохранить изменения</button>
+            <button type="button" class="btn btn-outline-secondary"
+                    th:onclick="|window.location.href='/newtest'|">Отменить</button>
+        </div>
     </form>
 </div>
 <footer class="py-5 bg-dark mt-auto">

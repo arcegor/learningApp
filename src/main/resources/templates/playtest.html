@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"  lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Playing test</title>
+    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+    <script src="/tinymce/tinymce.min.js"></script>
 </head>
-<body>
-$END$
+
+<body class="d-flex flex-column min-vh-100 body">
+
+<div th:insert="~{common :: header}"></div>
+
+<div class="container px-4 px-lg-5">
+    <div class="display-4 text-center" th:text="${test.name}"></div>
+    <form th:action="@{/playtest}" th:object="${test}" method="post">
+        <input type="hidden" th:field="*{id}" required>
+        <input type="hidden" th:field="*{name}" required>
+        <input type="hidden" th:field="*{description}" required>
+        <ol class="list-group py-1 mb-2">
+        <li class="list-group-item justify-content-between" th:each="question, stat: *{testQuestions}">
+                <div th:utext="${question.name}"></div>
+<!--                <input type="hidden" th:field="*{testQuestions[__${stat.index}__].id}" required>-->
+<!--                <input type="hidden" th:field="*{testQuestions[__${stat.index}__].name}" required>-->
+                <ol class="list-group list-group-flush" th:if="${not #lists.isEmpty(question.testAnswers)}">
+                    <li class="list-group-item justify-content-between" th:each="answer, iterStat: ${question.testAnswers}">
+                        <input class="form-check-input me-1" type="checkbox"
+                               th:value="${answer.flag}" th:id="${iterStat}">
+                        <label class="form-check-label stretched-link" th:for="${iterStat}" th:utext="${answer.name}"></label>
+                    </li>
+                </ol>
+        </li>
+    </ol>
+        <input type="submit" class="btn btn-primary" value="Проверить себя">
+    </form>
+</div>
+
+<footer class="py-5 bg-dark mt-auto">
+    <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

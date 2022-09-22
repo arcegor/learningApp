@@ -26,3 +26,8 @@
 .fs-6 {
     font-size: 1rem !important;
 }
+
+.body {
+    font-size: 1.25rem;
+    font-family: "Times New Roman", serif;
+}

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lesson</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="/css/sidebar.css" rel="stylesheet">
+    <link rel="stylesheet" href="/fontawesome/css/fontawesome.min.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -21,11 +23,82 @@
     </div>
   </div>
 </nav>
-<div class="container px-4 px-lg-5">
-  <h1 class="display-4 text-center" th:text="${lesson.name}"></h1>
-  <div class="text-start fs-5 text" th:text="${lesson.description}"></div>
-  <a class="btn btn-primary" th:href="@{/course/{id}(id=${course_id})}" role="button">Go to course page</a>
+<!--<div class="container px-4 px-lg-5">-->
+<!--  <h1 class="display-4 text-center" th:text="${lesson.name}"></h1>-->
+<!--  <div class="text-start py-1 mb-2 fs-5 text" th:text="${lesson.description}"></div>-->
+<!--  <iframe th:if="${lesson.video}" th:src="@{${lesson.video}}"></iframe>-->
+<!--  <div class="text-start py-2 mb-2 fs-5 text" th:utext="${lesson.data}"></div>-->
+<!--  <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/updatelesson/{id}(id=${lesson.id}, course_id=${course_id}, manual_id=${manual_id})}">-->
+<!--    Изменить урок</a>-->
+<!--  <a class="btn btn-primary" th:href="@{/{manual_id}/course/{id}(id=${course_id}, manual_id=${manual_id})}" role="button">Назад к курсу</a>-->
+<!--</div>-->
+
+<!--<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">-->
+<!--    <a href="#"-->
+<!--       class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">-->
+<!--        <span class="fs-5 fw-semibold" th:text="${course.name}"></span>-->
+<!--    </a>-->
+<!--    <div class="list-group list-group-flush border-bottom scrollarea">-->
+<!--        <a th:href="@{/{manual_id}/course/{id}(id=${course.id}, manual_id=${manual_id})}"-->
+<!--           class="list-group-item list-group-item-action active py-3 lh-sm" aria-current="true">-->
+<!--            <div class="d-flex w-100 align-items-center justify-content-between">-->
+<!--                <strong class="mb-1">Описание курса</strong>-->
+<!--            </div>-->
+<!--            <div class="col-10 mb-1 small" th:text="${course.description}"></div>-->
+<!--        </a>-->
+<!--        <div class="list-group-item list-group-item-action py-3 lh-sm" th:each="les, stat : ${lessonList}">-->
+<!--            <div class="d-flex w-100 align-items-center justify-content-between">-->
+<!--                <strong class="mb-1" th:text="${stat.count + ')  ' + les.name}"></strong>-->
+<!--                <div class="col-10 mb-1 small" th:text="${les.description}"></div>-->
+<!--                <iframe th:if="${les.video}" th:src="@{${les.video}}"></iframe>-->
+<!--                <div class="col-10 mb-1 small" th:utext="${les.data}"></div>-->
+<!--                <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/updatelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">-->
+<!--                    Изменить урок</a>-->
+<!--                <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/deletelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Удалить урок</a>-->
+<!--                <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/lesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Перейти к уроку</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="py-1 mb-2 fs-4">&ndash;&gt;-->
+<!--            <a class="btn btn-primary" th:href="@{/{manual_id}/{id}/newlesson(id=${course.id}, manual_id=${manual_id})}" role="button">Создать новый урок</a>-->
+<!--            <a class="btn btn-primary" th:href="@{/{manual_id}/courses(manual_id=${manual_id})}" role="button">К списку курсов</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<main>
+<div class="b-example-divider"></div>
+
+<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+    <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+        <span class="fs-5 fw-semibold">Список уроков</span>
+    </a>
+    <div class="list-group list-group-flush border-bottom scrollarea px-2">
+        <a th:href="@{/{manual_id}/{course_id}/lesson/{id}(id=${les.id}, course_id=${course.id}, manual_id=${manual_id})}"
+           class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true"
+           th:each="les, stat : ${lessonList}"
+        th:classappend="${les.id==flag} ? 'active' : ''">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+                <strong class="mb-1" th:text="${les.name}"></strong>
+            </div>
+            <div class="col-10 mb-1 small" th:text="${les.description}"></div>
+        </a>
+
+    <a class="btn btn-primary" th:href="@{/{manual_id}/course/{id}(id=${course_id}, manual_id=${manual_id})}" role="button">Назад к курсу</a>
+    </div>
 </div>
+<div class="b-example-divider"></div>
+
+    <div class="container px-4 px-lg-5">
+        <h1 class="display-4 text-center" th:text="${lesson.name}"></h1>
+        <div class="text-start py-1 mb-2 fs-5 text text-center" th:text="${lesson.description}"></div>
+        <iframe th:if="${lesson.video}" th:src="@{${lesson.video}}"
+                class="rounded mx-auto d-block" width="800" height="500"></iframe>
+        <div class="text-start py-2 mb-2 fs-5 text text-center" th:utext="${lesson.data}"></div>
+        <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/updatelesson/{id}(id=${lesson.id}, course_id=${course_id}, manual_id=${manual_id})}">Изменить урок</a>
+        <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/deletelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Удалить урок</a>
+    </div>
+</main>
+
+
 
 <footer class="py-5 bg-dark mt-auto">
   <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>

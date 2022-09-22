@@ -6,8 +6,9 @@ import ru.gazintech.learningApp.models.Lesson;
 import ru.gazintech.learningApp.models.Tag;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
-    List<Tag> findByQuestion_id(long id);
+    Tag findByName(String name);
 }

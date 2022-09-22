@@ -23,6 +23,12 @@
 </nav>
 <div class="container px-4 px-lg-5">
     <h1 class="display-4 text-center">Course list</h1>
+    <div>
+        <a class="btn btn-primary" th:href="@{/{id}/newcourse(id=${manual.id})}" role="button">Add new course</a>
+        <a class="btn btn-primary" th:href="@{/manual/{id}(id=${manual.id})}" role="button">Go to manual page</a>
+        <a class="btn btn-primary" th:href="@{/}" role="button">Go to main page</a>
+    </div>
+
     <div th:switch="${courseList}">
         <h2 th:case="${#lists.isEmpty(courseList)}">No courses yet!</h2>
         <div th:case="*">
@@ -31,20 +37,17 @@
                     <div class="ms-2 me-auto">
                         <div class="p-2 mb-2 fs-4" th:text="${stat.count + ')  ' + course.name}"></div>
                         <div class="p-2 mb-2 fs-4" th:text="${course.description}"></div>
-                        <div class="d-inline p-2">
-                            <a class="btn btn-primary" th:href="@{/{manual_id}/updatecourse/{id}(id=${course.id}, manual_id=${manual.id})}">
+                        <div class="position-relative">
+                            <a class="btn btn-primary position-absolute end-0" th:href="@{/{manual_id}/updatecourse/{id}(id=${course.id}, manual_id=${manual.id})}">
                                 Edit course</a>
-                            <a class="btn btn-primary" th:href="@{/{manual_id}/deletecourse/{id}(id=${course.id}, manual_id=${manual.id})}">Delete course</a>
-                            <a class="btn btn-primary" th:href="@{/course/{id}(id=${course.id})}">Go to course</a>
+                            <a class="btn btn-primary position-absolute top-0 end-0" th:href="@{/{manual_id}/deletecourse/{id}(id=${course.id}, manual_id=${manual.id})}">Delete course</a>
+                            <a class="btn btn-primary position-absolute top-0 end-0" th:href="@{/{manual_id}/course/{id}(id=${course.id}, manual_id=${manual.id})}">Go to course</a>
                         </div>
                     </div>
                 </li>
             </ol>
         </div>
     </div>
-    <a class="btn btn-primary" th:href="@{/{id}/newcourse(id=${manual.id})}" role="button">Add new course</a>
-    <a class="btn btn-primary" th:href="@{/manual/{id}(id=${manual.id})}" role="button">Go to manual page</a>
-    <a class="btn btn-primary" th:href="@{/}" role="button">Go to main page</a>
 </div>
 
 <footer class="py-5 bg-dark mt-auto">

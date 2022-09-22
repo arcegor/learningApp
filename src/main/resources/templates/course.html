@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Course</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.tiny.cloud/1/xdrzy7qkxs10wmw35t0w8sglrh9swjmnmnwhbra34vrz9fpm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <link href="/css/sidebar.css" rel="stylesheet">
+    <link href="/bootstrap-icons-old" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -21,36 +24,119 @@
         </div>
     </div>
 </nav>
-<div class="container px-4 px-lg-5">
-    <h1 class="display-4 text-center" th:text="${course.name}"></h1>
-    <div class="text-start fs-5 text" th:text="${course.description}"></div>
-    <h1 class="display-7 text-center">Lesson list</h1>
-    <div th:switch="${lessonList}">
-        <h2 th:case="${#lists.isEmpty(lessonList)}">No lessons yet!</h2>
-        <div th:case="*">
-            <ol class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-start"  th:each="lesson, stat : ${lessonList}">
-                    <div class="ms-2 me-auto">
-                        <div class="p-2 mb-2 fs-4" th:text="${stat.count + ')  ' + lesson.name}"></div>
-                        <div class="p-2 mb-2 fs-4" th:text="${lesson.description}"></div>
-                        <div class="d-inline p-2">
-                            <a class="btn btn-primary" th:href="@{/{course_id}/updatelesson/{id}(id=${lesson.id}, course_id=${course.id})}">
-                                Edit lesson</a>
-                            <a class="btn btn-primary" th:href="@{/{course_id}/deletelesson/{id}(id=${lesson.id}, course_id=${course.id})}">Delete lesson</a>
-                            <a class="btn btn-primary" th:href="@{/{course_id}/lesson/{id}(id=${lesson.id}, course_id=${course.id})}">Go to lesson</a>
-                        </div>
-                    </div>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <a class="btn btn-primary" th:href="@{/{id}/newlesson(id=${course.id})}" role="button">Add new lesson</a>
-</div>
+<!--<div class="container px-4 px-lg-5">-->
+<!--    <h1 class="display-4 text-center" th:text="${course.name}"></h1>-->
+<!--    <div class="text-start fs-5 text" th:text="${course.description}"></div>-->
+<!--    <h1 class="display-7 text-center" >Список уроков</h1>-->
+<!--    <div th:switch="${lessonList}">-->
+<!--        <h2 th:case="${#lists.isEmpty(lessonList)}">Пусто!</h2>-->
+<!--        <div th:case="*">-->
+<!--            <ol class="list-group">-->
+<!--                <li class="list-group-item d-flex justify-content-between align-items-start"  th:each="lesson, stat : ${lessonList}">-->
+<!--                    <div class="ms-2 me-auto">-->
+<!--                        <div class="p-2 mb-2 fs-4" th:text="${stat.count + ')  ' + lesson.name}"></div>-->
+<!--                        <div class="p-2 mb-2 fs-4" th:text="${lesson.description}"></div>-->
+<!--                        <div class="d-inline p-2">-->
+<!--                            <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/updatelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">-->
+<!--                                Изменить урок</a>-->
+<!--                            <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/deletelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Удалить урок</a>-->
+<!--                            <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/lesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Перейти к уроку</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--            </ol>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="py-1 mb-2 fs-4">-->
+<!--        <a class="btn btn-primary" th:href="@{/{manual_id}/{id}/newlesson(id=${course.id}, manual_id=${manual_id})}" role="button">Создать новый урок</a>-->
+<!--        <a class="btn btn-primary" th:href="@{/{manual_id}/courses(manual_id=${manual_id})}" role="button">К списку курсов</a>-->
+<!--    </div>-->
+<!--</div>-->
 
+<!--<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">-->
+<!--    <a href="#"-->
+<!--       class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">-->
+<!--        <span class="fs-5 fw-semibold" th:text="${course.name}"></span>-->
+<!--    </a>-->
+<!--    <div class="list-group list-group-flush border-bottom scrollarea">-->
+<!--&lt;!&ndash;        <a th:href="@{/{manual_id}/course/{id}(id=${course.id}, manual_id=${manual_id})}"&ndash;&gt;-->
+<!--&lt;!&ndash;           class="list-group-item list-group-item-action active py-3 lh-sm" aria-current="true">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="d-flex w-100 align-items-center justify-content-between">&ndash;&gt;-->
+<!--&lt;!&ndash;                <strong class="mb-1">Описание курса</strong>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="col-10 mb-1 small" th:text="${course.description}"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </a>&ndash;&gt;-->
+<!--        <div class="list-group-item list-group-item-action py-3 lh-sm" th:each="lesson, stat : ${lessonList}">-->
+<!--            <div class="d-flex w-100 align-items-center justify-content-between">-->
+<!--                <strong class="mb-1" th:text="${stat.count + ')  ' + lesson.name}"></strong>-->
+<!--                <div class="col-10 mb-1 small" th:text="${course.description}"></div>-->
+<!--                <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/updatelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">-->
+<!--                    Изменить урок</a>-->
+<!--                <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/deletelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Удалить урок</a>-->
+<!--                <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/lesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Перейти к уроку</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="py-1 mb-2 fs-4">&ndash;&gt;-->
+<!--            <a class="btn btn-primary" th:href="@{/{manual_id}/{id}/newlesson(id=${course.id}, manual_id=${manual_id})}" role="button">Создать новый урок</a>-->
+<!--            <a class="btn btn-primary" th:href="@{/{manual_id}/courses(manual_id=${manual_id})}" role="button">К списку курсов</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white">-->
+<!--    <div class="col-4">-->
+<!--        <div class="list-group" id="list-tab" role="tablist">-->
+<!--            <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" th:href="${lesson.name}" role="tab" th:each="lesson, stat : ${lessonList}">-->
+<!--                <div class="d-flex w-100 align-items-center justify-content-between">-->
+<!--                    <strong class="mb-1" th:text="${stat.count + ')  ' + lesson.name}"></strong>-->
+<!--                    <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/updatelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">-->
+<!--                        Изменить урок</a>-->
+<!--                    <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/deletelesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Удалить урок</a>-->
+<!--                    <a class="btn btn-primary" th:href="@{/{manual_id}/{course_id}/lesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}">Перейти к уроку</a>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="col-8">-->
+<!--        <div class="tab-content" id="nav-tabContent">-->
+<!--            <div class="tab-pane fade show active" th:id="${lesson.name}" role="tabpanel" aria-labelledby="list-home-list" th:each="lesson, stat : ${lessonList}">-->
+<!--                <div class="col-10 mb-1 small" th:text="${lesson.description}"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="py-1 mb-2 fs-4">&ndash;&gt;-->
+<!--    <a class="btn btn-primary" th:href="@{/{manual_id}/{id}/newlesson(id=${course.id}, manual_id=${manual_id})}" role="button">Создать новый урок</a>-->
+<!--    <a class="btn btn-primary" th:href="@{/{manual_id}/courses(manual_id=${manual_id})}" role="button">К списку курсов</a>-->
+<!--</div>-->
+<main>
+<div class="b-example-divider"></div>
+
+<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+    <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+        <span class="fs-5 fw-semibold">Список уроков</span>
+    </a>
+    <div class="list-group list-group-flush border-bottom scrollarea px-2">
+        <a th:href="@{/{manual_id}/{course_id}/lesson/{id}(id=${lesson.id}, course_id=${course.id}, manual_id=${manual_id})}"
+           class="list-group-item list-group-item-action py-3 lh-tight"
+           th:each="lesson, stat : ${lessonList}">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+                <strong class="mb-1" th:text="${lesson.name}"></strong>
+            </div>
+            <div class="col-10 mb-1 small" th:text="${lesson.description}"></div>
+        </a>
+    </div>
+    <div class="py-1 mb-2 fs-4">
+        <a class="btn btn-primary" th:href="@{/{manual_id}/{id}/newlesson(id=${course.id}, manual_id=${manual_id})}" role="button">
+            Создать новый урок</a>
+        <a class="btn btn-primary" th:href="@{/{manual_id}/courses(manual_id=${manual_id})}" role="button">К списку курсов</a>
+    </div>
+</div>
+    <div class="b-example-divider"></div>
+</main>
 <footer class="py-5 bg-dark mt-auto">
     <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
 </footer>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
 </body>

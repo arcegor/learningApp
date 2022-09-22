@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findByManual_Id(long id);
+    boolean existsCourseById(long id);
 }

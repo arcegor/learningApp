@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Test</title>
+  <title>Тест</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.tiny.cloud/1/xdrzy7qkxs10wmw35t0w8sglrh9swjmnmnwhbra34vrz9fpm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -24,24 +24,24 @@
   </div>
 </nav>
 <div class="container px-4 px-lg-5">
-  <h1 class="display-4 text-center" th:text="'Welcome to ' + ${test.name}"></h1>
+  <h1 class="display-4 text-center" th:text="'Добро пожаловать в тест: ' + ${test.name}"></h1>
   <div class="text-start fs-5 text" th:text="${test.description}"></div>
-  <div class="p-2 mb-2 fs-4">Questions: </div>
+  <div class="py-1 mb-2 fs-4">Вопросы: </div>
   <div class="list group list-group-numbered" th:if="${not #lists.isEmpty(testQuestionList)}">
     <div class="justify-content-between" th:each="question, stat: ${testQuestionList}">
-      <div class="border-success mb-2 fs-4" th:text="${stat.index+1 + ') ' + question.name}"></div>
-      <div class="p-2 mb-2 fs-4">Answers: </div>
+      <div class="mb-2 fs-5" th:text="${stat.index+1 + ') ' + question.name}"></div>
+      <div class="py-1 mb-2 fs-4">Ответы: </div>
       <div class="list-group" th:if="${not #lists.isEmpty(question.testAnswers)}">
         <div class="justify-content-between" th:each="answer, iterStat: ${question.testAnswers}">
-          <div th:if="${answer.flag}" th:text="${stat.count + '.' + iterStat.count + ') ' + answer.name}" class="bg-success d-inline-flex text-dark p-2 mb-2 fs-4 bg-opacity-50">
+          <div th:if="${answer.flag}" th:text="${stat.count + '.' + iterStat.count + ') ' + answer.name}" class="bg-success d-inline-flex text-dark py-1 mb-2 fs-5 bg-opacity-50">
           </div>
-          <div th:if="${!answer.flag}" th:text="${stat.count + '.' + iterStat.count + ') ' + answer.name}" class="text d-inline-flex p-2 mb-2 fs-4">
+          <div th:if="${!answer.flag}" th:text="${stat.count + '.' + iterStat.count + ') ' + answer.name}" class="text d-inline-flex py-1 mb-2 fs-5">
           </div>
         </div>
       </div>
     </div>
-  </div>
-<a class="btn btn-primary" th:href="@{/{id}/tests(id=${manualId})}" role="button">Go to tests</a>
+  </div><a class="btn btn-primary" th:href="@{/updatetest/{id}(id=${test.id})}">Изменить тест</a>
+<a class="btn btn-primary" th:href="@{/{id}/tests(id=${manualId})}" role="button">Перейти к тестам</a>
 </div>
 <footer class="py-5 bg-dark mt-auto">
   <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>

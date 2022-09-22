@@ -23,7 +23,6 @@ public class Course {
     private long id;
 
     @NotBlank
-    @Length(min = 1, max = 255)
     private String name;
 
     private String description;

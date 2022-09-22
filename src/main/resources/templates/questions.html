@@ -22,29 +22,45 @@
     </div>
 </nav>
 <div class="container px-4 px-lg-5">
-    <h1 class="display-4 text-center">Question list</h1>
+    <h1 class="display-4 text-center">Список вопросов</h1>
     <div th:switch="${questionList}">
-        <h2 th:case="${#lists.isEmpty(questionList)}">No questions yet!</h2>
+        <h2 th:case="${#lists.isEmpty(questionList)}">пусто!</h2>
         <div th:case="*">
-            <ol class="list-group">
+            <ol class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between align-items-start"  th:each="question, stat : ${questionList}">
                     <div class="ms-2 me-auto">
                         <div class="p-2 mb-2 fs-4" th:text="${stat.count + ')  ' + question.name}"></div>
-                        <div class="p-2 mb-2 fs-4" th:text="${question.description}"></div>
                         <div class="d-inline p-2">
-                            <a class="btn btn-primary" th:href="@{/{manual_id}/updatequestion/{id}(id=${question.id}, manual_id=${manual.id})}">
-                                Edit question</a>
-                            <a class="btn btn-primary" th:href="@{/{manual_id}/deletequestion/{id}(id=${question.id}, manual_id=${manual.id})}">Delete question</a>
-                            <a class="btn btn-primary" th:href="@{/question/{id}(id=${question.id})}">Go to question</a>
+                            <a class="btn btn-primary" th:href="@{/updatequestion/{id}(id=${question.id})}">Изменить вопрос</a>
+                            <a class="btn btn-primary" th:href="@{/deletequestion/{id}(id=${question.id})}">Удалить вопрос</a>
+                            <a class="btn btn-primary" th:href="@{/question/{id}(id=${question.id})}">Открыть вопрос</a>
                         </div>
                     </div>
                 </li>
             </ol>
         </div>
     </div>
-    <a class="btn btn-primary" th:href="@{/{id}/newquestion(id=${manual.id})}" role="button">Add new question</a>
-    <a class="btn btn-primary" th:href="@{/manual/{id}(id=${manual.id})}" role="button">Go to manual page</a>
-    <a class="btn btn-primary" th:href="@{/}" role="button">Go to main page</a>
+    <form th:action="@{/initquestion}" th:object="${manual}" method="post">
+        <input type="hidden" th:field="*{id}" th:name="id">
+        <input type="submit" class="btn btn-primary" value="Добавить новый вопрос">
+    </form>
+    <h1 class="display-4 text-center">Список тэгов</h1>
+    <div class="ms-2 me-auto">
+    <ol class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between align-items-start" th:each="tag, itemStat : ${tagList}">
+            <div class="py-1 mb-2 fs-4" th:text="${tag.name}"></div>
+            <a class="btn btn-primary" th:href="@{/{manual_id}/deletetag/{name}(name=${tag.name}, manual_id=${manual.id})}">Удалить тэг</a>
+        </li>
+    </ol>
+    <form th:action="@{/newtag}" th:object="${tag}" method="post">
+        <input type="text" th:field="*{name}" required>
+        <input type="hidden" th:value="${id}" th:name="id" required>
+        <input type="submit" class="btn btn-primary" value="Добавить новый тэг">
+    </form>
+    <div class="py-1 mb-2 fs-4">
+        <a class="btn btn-primary" th:href="@{/manual/{id}(id=${manual.id})}" role="button">Перейти к обучалке</a>
+    </div>
+    </div>
 </div>
 
 <footer class="py-5 bg-dark mt-auto">

@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.tiny.cloud/1/xdrzy7qkxs10wmw35t0w8sglrh9swjmnmnwhbra34vrz9fpm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="/tinymce/tinymce.min.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,96 +25,104 @@
     </div>
 </nav>
 <div class="container px-4 px-lg-5">
-    <div class="text-center display-4">Updating test</div>
+    <div class="text-center display-4">Изменение теста</div>
     <div th:if="${testName != null}">
-        <div class="p-2 mb-2 fs-4">Test name:</div>
-        <div class="border border-success p-2 mb-2 fs-4" th:text="${testName}"></div>
+        <div class="py-1 mb-2 fs-4">Название теста:</div>
+        <div class="py-1 mb-2 fs-5" th:text="${testName}"></div>
     </div>
-    <button type="button" class="btn btn-primary" th:if="${testName != null}" th:onclick="|window.location.href='/edittestname'|">Edit test name</button>
+    <button type="button" class="btn btn-primary" th:if="${testName != null}" th:onclick="|window.location.href='/edittestname'|">Изменить название теста</button>
     <form th:if="${testName == null}" th:action="@{/testname}" th:object="${test}" method="post">
-        <label for="testName" class="form-label p-2 mb-2 fs-4">Test name:</label>
-        <input type="text" class="form-control p-2 mb-2 fs-4" id="testName" th:placeholder="*{name}" th:field="*{name}" required>
-        <input type="submit" class="btn btn-primary" value="Change test name">
+        <label for="testName" class="form-label py-1 mb-2 fs-4">Название теста:</label>
+        <input type="text" class="form-control py-1 mb-2 fs-5" id="testName" th:placeholder="*{name}" th:field="*{name}" required>
+        <input type="submit" class="btn btn-primary" value="Add test name">
     </form>
     <div th:if="${testDescription != null}">
-        <div class="p-2 mb-2 fs-4">Test description:</div>
-        <div class="border border-success p-2 mb-2 fs-4" th:text="${testDescription}"></div>
+        <div class="py-1 mb-2 fs-4">Описание теста:</div>
+        <div class="py-1 mb-2 fs-5" th:text="${testDescription}"></div>
     </div>
-    <button type="button" class="btn btn-primary" th:if="${testDescription != null}" th:onclick="|window.location.href='/edittestdescription'|">Edit test description</button>
+    <button type="button" class="btn btn-primary" th:if="${testDescription != null}" th:onclick="|window.location.href='/edittestdescription'|">Изменить описание теста</button>
     <form th:if="${testDescription == null}" th:action="@{/testdescription}" th:object="${test}" method="post">
-        <label for="testDescription" class="form-label p-2 mb-2 fs-4">Test description</label>
-        <textarea class="form-control p-2 mb-2 fs-4" rows="1" id="testDescription" aria-label="Description"
-                  th:placeholder="*{description}" th:field="*{description}"></textarea>
-        <input type="submit" class="btn btn-primary" value="Change test description">
+        <label for="testDescription" class="form-label py-1 mb-2 fs-4">Описание теста</label>
+        <textarea class="form-control py-1 mb-2 fs-5" rows="1" id="testDescription" aria-label="Description" th:placeholder="*{description}" th:field="*{description}"></textarea>
+        <input type="submit" class="btn btn-primary" value="Добавить описание теста">
     </form>
     <div th:if="${number != null}">
-        <div class="p-2 mb-2 fs-4">Test number:</div>
-        <div class="border border-success p-2 mb-2 fs-4" th:text="${number}"></div>
+        <div class="py-1 mb-2 fs-4">Номер теста:</div>
+        <div class="py-1 mb-2 fs-5" th:text="${number}"></div>
     </div>
-    <button type="button" class="btn btn-primary" th:if="${number != null}" th:onclick="|window.location.href='/edittestnumber'|">Edit test number</button>
+    <button type="button" class="btn btn-primary" th:if="${number != null}" th:onclick="|window.location.href='/edittestnumber'|">Изменить номер теста</button>
     <form th:if="${number == null}" th:action="@{/addtestnumber}" th:object="${test}" method="post">
-        <label for="number" class="form-label p-2 mb-2 fs-4">Test number:</label>
-        <input type="text" class="form-control p-2 mb-2 fs-4" id="number" placeholder="Test number" th:field="*{number}" required>
-        <input type="submit" class="btn btn-primary" value="Add test number">
+        <label for="number" class="form-label py-1 mb-2 fs-4">Номер теста:</label>
+        <input type="text" class="form-control py-1 mb-2 fs-5" id="number" th:placeholder="*{number}" th:field="*{number}" required>
+        <input type="submit" class="btn btn-primary" value="Добавить номер теста">
     </form>
-    <div class="p-2 mb-2 fs-4">Questions: </div>
-    <div class="list group list-group-numbered" th:if="${not #lists.isEmpty(testQuestionList)}">
-        <div class="justify-content-between" th:each="question, stat: ${testQuestionList}">
-            <div class="border-success mb-2 fs-4" th:text="${stat.index+1 + ') ' + question.name}"></div>
-            <a type="button" class="btn btn-primary" th:href="@{/deletetestquestion/{id}(id=${stat.index})}">Delete question</a>
-            <a type="button" class="btn btn-primary" th:href="@{/edittestquestion/{id}(id=${stat.index})}">Edit question</a>
 
-            <div class="p-2 mb-2 fs-4">Answers: </div>
-            <div class="list-group" th:if="${not #lists.isEmpty(question.testAnswers)}">
-                <div class="justify-content-between" th:each="answer, iterStat: ${question.testAnswers}">
-                    <div th:if="${answer.flag}" th:text="${stat.count + '.' + iterStat.count + ') ' + answer.name}" class="bg-success d-inline-flex text-dark p-2 mb-2 fs-4 bg-opacity-50">
-                    </div>
-                    <div th:if="${!answer.flag}" th:text="${stat.count + '.' + iterStat.count + ') ' + answer.name}" class="text d-inline-flex p-2 mb-2 fs-4">
-                    </div>
-                    <a type="button" class="btn btn-primary" th:href="@{/deletetestanswer/{id_question}/{id_answer}(id_answer=${iterStat.index}, id_question=${stat.index})}">Delete answer</a>
+    <div class="py-1 mb-2 fs-4">Вопросы: </div>
+    <ol class="list group list-group-numbered py-1 mb-2 fs-4">
+        <li class="list-group-item d-flex justify-content-between align-items-start" th:each="question, stat: ${testQuestionList}">
+            <div class="vstack gap-4">
+                <div class="fs-4" th:utext="${question.name}"></div>
+                <div class="hstack gap-2">
+                    <a type="button" class="btn btn-primary" th:href="@{/deletetestquestion/{id}(id=${stat.index})}">Delete question</a>
+                    <a type="button" class="btn btn-primary" th:href="@{/edittestquestion/{id}(id=${stat.index})}">Edit question</a>
                 </div>
+                <div class="fs-4">Ответы: </div>
+                <ol class="list-group list-group-numbered fs-4" th:if="${not #lists.isEmpty(question.testAnswers)}">
+                    <li class="list-group-item d-flex justify-content-between align-items-start" th:each="answer, iterStat: ${question.testAnswers}">
+                        <div th:if="${answer.flag}" th:utext="${answer.name}" class="py-0 me-auto fs-4 bg-success text-dark bg-opacity-50">
+                        </div>
+                        <div th:if="${!answer.flag}" th:utext="${answer.name}" class="py-0 me-auto fs-4">
+                        </div>
+                        <a type="button" class="btn btn-primary" th:href="@{/deletetestanswer/{id_question}/{id_answer}(id_answer=${iterStat.index}, id_question=${stat.index})}">Delete answer</a>
+                    </li>
+                </ol>
+                <form th:action="@{/testquestionanswer}" th:object="${testAnswer}" method="post">
+                    <div class="form-group">
+                        <label for="testAnswer" class="form-label py-1 mb-2 fs-4">Добавить Ответ</label>
+                        <textarea type="text" rows="1" id="testAnswer" class="form-control py-1 mb-2 fs-4" th:field="*{name}" autocomplete="on"></textarea>
+                        <script>
+                            tinymce.init({
+                                selector: '#testAnswer',
+                                height: '200',
+                                plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinymcespellchecker',
+                                toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents',
+                                toolbar_mode: 'floating'
+                            });
+                        </script>
+                        <div class="hstack gap-2 py-1 fs-6">
+                            <input class="form-check-input me-1" type="checkbox" th:field="*{flag}">Укажите если ответ правильный
+                            <input type="hidden" th:value="${stat.index}" th:name="index" required>
+                            <input type="submit" class="btn btn-primary" value="Добавить ответ">
+                        </div>
+                    </div>
+                </form>
             </div>
-            <form th:action="@{/testquestionanswer}" th:object="${testAnswer}" method="post">
-                <div class="form-group p-2 mb-2 fs-4">
-                    <label for="testAnswer">Add answer</label>
-                    <textarea type="text" rows="1" id="testAnswer" class="form-control p-2 mb-2 fs-4"
-                              th:field="*{name}" autocomplete="on"></textarea>
-                    <script>
-                        tinymce.init({
-                            selector: '#testAnswer',
-                            height: '200',
-                            plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinymcespellchecker',
-                            toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents',
-                            toolbar_mode: 'floating'
-                        });
-                    </script>
-                    <div>
-                        <input class="form-check-input" id="answerFlag" type="checkbox" th:field="*{flag}">
-                        <label class="form-check-label" for="answerFlag">Type if this answer is true</label>
-                    </div>
-                    <input type="hidden" th:value="${stat.index}" th:name="index" required>
-                    <input type="submit" class="btn btn-primary" value="Add question answer">
-                </div>
-            </form>
-        </div>
-    </div>
+        </li>
+    </ol>
     <form th:action="@{/testquestion}" th:object="${testQuestion}" method="post">
-        <label for="testQuestion" class="form-label p-2 mb-2 fs-4">Add test question</label>
-        <textarea type="text" rows="1" id="testQuestion" class="form-control p-2 mb-2 fs-4" th:field="*{name}" autocomplete="on"></textarea>
-        <script>
-            tinymce.init({
-                selector: '#testQuestion',
-                height: '200',
-                plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinymcespellchecker',
-                toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents',
-                toolbar_mode: 'floating'
-            });
-        </script>
-        <input type="submit" class="btn btn-primary p-2 mb-2" value="Add test question">
+        <div class="form-group py-1 mb-2 fs-4">
+            <label for="testQuestion" class="form-label py-1 mb-2 fs-4">Добавить вопрос</label>
+            <textarea type="text" rows="1" id="testQuestion" class="form-control py-1 mb-2 fs-4"
+                      th:placeholder="*{name}" th:field="*{name}" autocomplete="on"></textarea>
+            <script>
+                tinymce.init({
+                    selector: '#testQuestion',
+                    height: '200',
+                    plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinymcespellchecker',
+                    toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents',
+                    toolbar_mode: 'floating'
+                });
+            </script>
+            <div class="hstack gap-2 py-1">
+                <input class="form-control mb-2 fs-6" type="text" th:field="*{number}" th:placeholder="*{number}">
+                <input type="submit" class="btn btn-primary mb-2" value="Добавить вопрос">
+            </div>
+        </div>
+
     </form>
-    <div class="p-2 mb-2 fs-4">
-        <a class="btn btn-primary" th:href="@{/savetest}" th:disabled="${testName == null}">Save test</a>
-        <a class="btn btn-primary" th:href="@{/backtotests}" role="button">Go to tests</a>
+    <div class="py-1 mb-2 fs-4">
+        <a class="btn btn-primary" th:href="@{/savetest}" th:disabled="${testName == null}">Сохранить тест</a>
+        <a class="btn btn-primary" th:href="@{/backtotests}" role="button">К списку тестов</a>
     </div>
 </div>
 <footer class="py-5 bg-dark mt-auto">

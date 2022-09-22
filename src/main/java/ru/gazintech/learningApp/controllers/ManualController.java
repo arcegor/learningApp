@@ -5,14 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ru.gazintech.learningApp.models.Course;
-import ru.gazintech.learningApp.models.Manual;
-import ru.gazintech.learningApp.models.Question;
-import ru.gazintech.learningApp.models.Test;
-import ru.gazintech.learningApp.repository.CourseRepository;
-import ru.gazintech.learningApp.repository.ManualRepository;
-import ru.gazintech.learningApp.repository.QuestionRepository;
-import ru.gazintech.learningApp.repository.TestRepository;
+import ru.gazintech.learningApp.models.*;
+import ru.gazintech.learningApp.repository.*;
 
 import java.util.List;
 
@@ -27,13 +21,19 @@ public class ManualController {
     private TestRepository testRepository;
 
     @Autowired
+    private MaterialRepository materialRepository;
+
+    @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @GetMapping("/{id}/tests")
     public String showTests(@PathVariable(value = "id") long id, Model model){
         List<Test> testList = testRepository.findByManual_IdOrderByNumber(id);
         Manual manual =  manualRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid manual Id:" + id));
         model.addAttribute("manual", manual);
         model.addAttribute("testList", testList);
         return "tests";
@@ -43,7 +43,7 @@ public class ManualController {
     public String showCourses(@PathVariable(value = "id") long id, Model model){
         List<Course> courseList = courseRepository.findByManual_Id(id);
         Manual manual =  manualRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid test Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid manual Id:" + id));
         model.addAttribute("manual", manual);
         model.addAttribute("courseList", courseList);
         return "courses";
@@ -52,15 +52,24 @@ public class ManualController {
     @GetMapping("/{id}/questions")
     public String showQuestions(@PathVariable(value = "id") long id, Model model){
         List<Question> questionList = questionRepository.findByManual_Id(id);
+        List<Tag> tagList = tagRepository.findAll();
         Manual manual =  manualRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid manual Id:" + id));
         model.addAttribute("manual", manual);
         model.addAttribute("questionList", questionList);
+        model.addAttribute("tagList", tagList);
+        model.addAttribute("tag", new Tag());
         return "questions";
     }
 
-    @GetMapping("/materials")
-    public String showMaterials(Model model){
+    @GetMapping("/{id}/materials")
+    public String showMaterials(@PathVariable(value = "id") long id,
+                                Model model){
+        List<Material> materialList = materialRepository.findByManual_Id(id);
+        Manual manual =  manualRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid manual Id:" + id));
+        model.addAttribute("manual", manual);
+        model.addAttribute("materialList", materialList);
         return "materials";
     }
 

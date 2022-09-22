@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"manual"})
+@ToString(exclude = {"manual", "tags"})
 @Table(name = "question")
 public class Question {
     @Id
@@ -22,16 +23,36 @@ public class Question {
     private long id;
 
     @NotBlank
-    @Length(min = 1, max = 255)
     private String name;
 
-    private String description;
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @NotBlank
+    private String answer;
 
-    @OneToMany(mappedBy = "question", orphanRemoval = true,
-            cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "question_tags",
+            joinColumns = { @JoinColumn(name = "question_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") })
     private List<Tag> tags;
 
     @ManyToOne
     private Manual manual;
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+        tag.getQuestions().add(this);
+    }
+
+    public void removeTag(long tagId) {
+        Tag tag = this.tags.stream().filter(t -> t.getId() == tagId).findFirst().orElse(null);
+        if (tag != null) {
+            this.tags.remove(tag);
+            tag.getQuestions().remove(this);
+        }
+    }
 }
 

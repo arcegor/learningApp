@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"question"})
+@ToString(exclude = {"manual", "questions"})
 @Table(name = "tag")
 public class Tag {
     @Id
@@ -24,11 +24,28 @@ public class Tag {
     private long id;
 
     @NotBlank
-    @Length(min = 1, max = 255)
     private String name;
 
-    private String description;
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.MERGE
+            }, mappedBy = "tags")
+    private List<Question> questions;
 
-    @ManyToOne
-    private Question question;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Manual manual;
+
+    public void addQuestion(Question question) {
+        this.questions.add(question);
+        question.getTags().add(this);
+    }
+
+    public void removeQuestion(long questionId) {
+        Question question = this.questions.stream().filter(t -> t.getId() == questionId).findFirst().orElse(null);
+        if (question != null) {
+            this.questions.remove(question);
+            question.getTags().remove(this);
+        }
+    }
+
 }

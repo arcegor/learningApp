@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByCourse_id(long id);
+    boolean existsLessonById(long id);
 
 }

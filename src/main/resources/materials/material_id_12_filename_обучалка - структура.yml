@@ -1,0 +1,118 @@
+    Manual:
+      description: Содержимое обучалки, её основные разделы
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        courses:
+          description: пока условно Курсы
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+        faq:
+          description: среднее между FAQ и базой знаний, здесь будут и собственно вопросы и ответы на них, и остальные статьи (по типу Сигнал А-1, MRZ...)
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        materials:
+          description: материалы, т.е. файлы с инструкциями и чем-то еще, что можно скачать
+          type: array
+          items:
+            $ref: '#/components/schemas/Material'
+        tests:
+          description: тесты
+          type: array
+          items:
+            $ref: '#/components/schemas/Test'
+    Course:
+      description:
+        Курс, состоящий из нескольких последовательных тем или уроков, или презентация из нескольких последовательных слайдов
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        lessons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lesson'
+    Lesson:
+      description: тема или урок курса либо слайд в презентации
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        data:
+          type: string
+          description: основное содержимое с html, в т.ч. с возможностью вставлять картинки
+        videoLink:
+          type: string
+          description: может быть один видеофайл, здесь ссылка на него
+    Question:
+      description: вопрос FAQ или статья базы знаний
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+        tags:
+          description: вопросы снабжены списков тегов (FAQ, Сигналы...)
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    Tag:
+      type: object
+      properties:
+        name:
+          type: string
+    Material:
+      description: материалы, т.е. файлы для скачивания
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        link:
+          description: локальная ссылка
+          type: string
+    Test:
+      description: Тест, состоящий из фиксированного набора вопросов; вопросы отображаются последовательно и в заданном порядке
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestQuestion'
+    TestQuestion:
+      description: вопрос теста
+      type: object
+      properties:
+        question:
+          description: формулировка вопроса (здесь может быть html верстка, в т.ч. картинка)
+          type: string
+        answers:
+          description: перечень вариантов ответа
+          type: array
+          items:
+            $ref: '#/components/schemas/TestAnswer'
+    TestAnswer:
+      description: вариант ответа на вопрос теста
+      type: object
+      properties:
+        text:
+          description: формулировка ответа (здесь может быть html верстка, в т.ч. картинка)
+          type: string
+        isCorrect:
+          description: признак правильности ответа (у вопроса может быть несколько правильных вариантов ответа, тогда считаем что на вопрос ответили правильно, если выбрали ВСЕ правильные варианты); для того, чтобы не списывали, необходимо либо тест целиком, либо правильные варианты ответов хранить не как плейн текст
+          type: boolean

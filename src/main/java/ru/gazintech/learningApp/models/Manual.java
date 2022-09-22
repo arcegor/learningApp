@@ -20,21 +20,23 @@ public class Manual {
     private long id;
 
     @NotBlank
-    @Length(min = 1, max = 255)
     private String name;
 
     private String description;
 
-    @OneToMany(mappedBy = "manual", orphanRemoval = true,
+    @OneToMany(mappedBy = "manual",
             cascade = CascadeType.ALL)
     private List<Material> materials;
-    @OneToMany(mappedBy = "manual", orphanRemoval = true,
+    @OneToMany(mappedBy = "manual",
             cascade = CascadeType.ALL)
     private List<Course> courses;
-    @OneToMany(mappedBy = "manual", orphanRemoval = true,
+    @OneToMany(mappedBy = "manual",
             cascade = CascadeType.ALL)
     private List<Test> tests;
-    @OneToMany(mappedBy = "manual", orphanRemoval = true,
+    @OneToMany(mappedBy = "manual",
             cascade = CascadeType.ALL)
     private List<Question> questions;
+    @OneToMany(mappedBy = "manual",
+            cascade = CascadeType.ALL)
+    private List<Tag> tags;
 }

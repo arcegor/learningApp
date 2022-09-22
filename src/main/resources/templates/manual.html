@@ -4,68 +4,56 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Manual</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
 </head>
-<body class="d-flex flex-column min-vh-100">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container px-5">
-        <a class="navbar-brand" href="#!">Offline User Training</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}" role="button">
-                    Main page</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">Go back</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+
+<body class="d-flex flex-column min-vh-100 body">
+
+<div th:insert="~{common :: header}"></div>
 <div class="container px-4 px-lg-5">
-        <h1 class="display-4 text-center" th:text="'Welcome to ' + ${manual.name}"></h1>
-        <div class="text-start fs-5 text" th:text="${manual.description}"></div>
+        <h1 class="text-center display-5 py-5" th:text="'Добро пожаловать в ' + ${manual.name}"></h1>
+        <div class="text-start" th:text="${manual.description}"></div>
         <div class="row row-cols-1 row-cols-md-2 g-4">
             <div class="col">
                 <div class="card text-center text-bg-light">
                     <div class="card-body">
                         <h5 class="card-title">Courses</h5>
                         <p class="card-text">This section contains video tutorials that explain how to work with elements of the hardware and software complex. Here you can find both materials for working with software, as well as a visual guide for working with peripheral equipment.</p>
-                        <div class="card-footer mt-auto position-sticky top-100">
+                        <div class="mt-auto position-sticky top-100">
                              <a th:href="@{/{id}/courses(id=${manual.id})}" class="btn btn-primary stretched-link">Go to courses</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col">
-                <div class="card h-100 text-center text-bg-light">
+                <div class="card text-center text-bg-light">
                     <div class="card-body">
                         <h5 class="card-title">Tests</h5>
                         <p class="card-text">Some description</p>
-                        <div class="card-footer mt-auto position-sticky top-100">
+                        <div class="mt-auto position-sticky top-100">
                              <a th:href="@{/{id}/tests(id=${manual.id})}" class="btn btn-primary stretched-link">Go to tests</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col">
-                <div class="card h-100 text-center text-bg-light">
+                <div class="card text-center text-bg-light">
                     <div class="card-body">
                         <h5 class="card-title">FAQ</h5>
                         <p class="card-text">When working with the system, sometimes atypical situations arise that raise questions from users, Therefore, frequently asked questions and answers to them are collected in this section.</p>
-                        <div class="card-footer mt-auto position-sticky top-100">
+                        <div class="mt-auto position-sticky top-100">
                             <a th:href="@{/{id}/questions(id=${manual.id})}" class="btn btn-primary stretched-link">Go to faq</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col">
-                <div class="card h-100 text-center text-bg-light">
+                <div class="card text-center text-bg-light">
                     <div class="card-body">
                         <h5 class="card-title">Materials</h5>
                         <p class="card-text">This section contains documentation on working with the APK: user guides by roles, regulatory documents, etc.</p>
-                        <div class="card-footer mt-auto position-sticky top-100">
+                        <div class="mt-auto position-sticky top-100">
                             <a th:href="@{/{id}/materials(id=${manual.id})}" class="btn btn-primary stretched-link">Go to materials</a>
                         </div>
                     </div>
@@ -73,9 +61,13 @@
             </div>
         </div>
 </div>
+
 <footer class="py-5 bg-dark mt-auto">
     <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; GOZNAK, 2022.</p></div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>
